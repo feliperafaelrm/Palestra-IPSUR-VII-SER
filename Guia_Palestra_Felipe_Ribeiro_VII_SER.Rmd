@@ -1,0 +1,152 @@
+---
+title: 'Guia para palestra "O Problema do Aniversário, o pacote IPSUR e seu plugin
+  para o R Commander: uma possibilidade para sala de aula"'
+author: "Felipe Rafael Ribeiro Melo"
+date: "`25 de maio de 2023`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=F)
+require(IPSUR)
+```
+
+\
+
+## LINK devtools - PASSO 2 SOLICITA A INSTALAÇÃO DO RTOOLS NO WINDOWS:
+
+### https://www.r-project.org/nosvn/pandoc/devtools.html
+
+\
+
+## LINKS PARA DOWNLOAD DO RTOOLS:
+
+### Para versões R 4.3.x: https://cran.r-project.org/bin/windows/Rtools/rtools43/files/rtools43-5550-5548.exe
+### Para versões R 4.2.x: https://cran.r-project.org/bin/windows/Rtools/rtools42/files/rtools42-5355-5357.exe
+### Para versões R 4.0.0 até R 4.1.3: https://github.com/r-windows/rtools-installer/releases/download/2022-02-06/rtools40-x86_64.exe 
+### Para versões anteriores ao R 4.0.0: https://cran.r-project.org/bin/windows/Rtools/history.html
+
+\
+
+## INSTALAÇÃO DO PACOTE IPSUR, CONFORME https://ipsur.org/:
+```{r }
+## INSTALANDO PACOTES DO REPOSITÓRIO CRAN REFERENCIADOS NO IPSUR:
+install.packages(c("actuar", "aplpack", "binom", "boot", "coin", "diagram",
+                   "distrEx", "e1071", "emdbook", "ggplot2", "HH", "Hmisc",
+                   "lmtest", "mvtnorm", "qcc", "reshape", "RcmdrMisc",
+                   "scatterplot3d", "TeachingDemos", "vcd"))
+
+## INSTALAÇÃO DO PACOTE prob, QUE NÃO ESTÁ MAIS NO REPOSITÓRIO CRAN:
+install.packages("combinat")  # pacote combinat é uma dependência do pacote prob
+install.packages("devtools")  # caso o pacote devtools não esteja instalado ainda
+devtools::install_github("gjkerns/prob")
+
+## FINALIZANDO INSTALAÇÃO DO PACOTE IPSUR:
+devtools::install_github("gjkerns/IPSUR")
+```
+
+\
+
+## CASO VOCÊ ESTEJA USANDO ALGUMA DISTRIBUIÇÃO LINUX E O PASSO A PASSO ACIMA NÃO TENHA FUNCIONADO, SEGUE UMA ALTERNATIVA, CONFORME EXPERIÊNCIA PRÓPRIA COM DISTRO BASEADA NO UBUNTU:
+```{r }
+# FAZER OS SEGUINTES COMANDOS NO TERMINAL DO LINUX, COM O R JÁ INSTALADO:
+
+## INSTALANDO PACOTE libmpfr (DO PROPRIO LINUX):
+sudo apt-get install libmpfr-dev
+
+## INSTALANDO DEVTOOLS, COMBINAT E OUTROS PACOTES DO REPOSITÓRIO CRAN:
+sudo apt-get install r-cran-actuar r-cran-aplpack r-cran-binom r-cran-boot r-cran-coin r-cran-diagram r-cran-distrEx r-cran-e1071 r-cran-emdbook r-cran-ggplot2 r-cran-HH r-cran-Hmisc r-cran-lmtest r-cran-mvtnorm r-cran-qcc r-cran-reshape r-cran-RcmdrMisc r-cran-scatterplot3d r-cran-TeachingDemos r-cran-vcd r-cran-combinat r-cran-devtools 
+
+### CASO DÊ ERRO NA LINHA ACIMA, REMOVA DELA OS PACOTES NOTIFICADOS COMO NÃO EXISTENTES. PRECISEI REMOVI 8 DELES:
+### r-cran-binom r-cran-diagram r-cran-distrEx r-cran-HH r-cran-Hmisc r-cran-qcc r-cran-RcmdrMisc r-cran-TeachingDemos
+sudo apt-get install r-cran-actuar r-cran-aplpack r-cran-boot r-cran-coin r-cran-e1071 r-cran-emdbook r-cran-ggplot2 r-cran-lmtest r-cran-mvtnorm r-cran-reshape r-cran-scatterplot3d r-cran-vcd r-cran-combinat r-cran-devtools 
+
+
+## ABRINDO O R NO TERMINAL DO LINUX:
+sudo R
+
+## INSTALAÇÃO DO PACOTE prob, QUE NÃO ESTÁ MAIS NO REPOSITÓRIO CRAN:
+devtools::install_github("gjkerns/prob")
+
+## FINALIZANDO INSTALAÇÃO DO PACOTE IPSUR:
+devtools::install_github("gjkerns/IPSUR")
+```
+
+\
+
+## CARREGANDO PACOTE IPSUR E ACESSANDO O LIVRO "INTRODUCTION TO PROBABILITY AND STATISTICS USING R":
+```{r}
+## CARREGANDO PACOTE IPSUR:
+require(IPSUR)
+
+## ABRINDO ARQUIVO DO LIVRO:
+read(IPSUR)
+```
+
+\
+
+## DIRETÓRIO NO QUAL ESTÁ O ARQUIVO IPSUR.pdf (NA PASTA DE USUÁRIO DO WINDOWS):
+### AppData\\Local\\R\\win-library\\4.3\\IPSUR\\doc
+
+\
+
+## FUNÇÕES DISPONÍVEIS NO PACOTE IPSUR:
+```{r }
+ls("package:IPSUR")
+```
+
+\
+
+## EXEMPLOS DA FUNÇÃO pbirthday.ipsur:
+```{r }
+pbirthday.ipsur(10)
+pbirthday.ipsur(23)
+pbirthday.ipsur(30)
+pbirthday.ipsur(40)
+pbirthday.ipsur(50)
+pbirthday.ipsur(100)
+pbirthday.ipsur(120)
+options(digits=22)
+pbirthday.ipsur(120)
+```
+
+\
+
+## EXEMPLOS DA FUNÇÃO qbirthday.ipsur:
+```{r }
+qbirthday.ipsur(0.25)
+qbirthday.ipsur(0.50)
+qbirthday.ipsur(0.75)
+qbirthday.ipsur(0.90)
+qbirthday.ipsur(0.95)
+qbirthday.ipsur(0.99)
+qbirthday.ipsur(1)
+``` 
+
+\
+
+## GRÁFICO NÚMERO DE PESSOAS NA SALA x PROBABILIDADE DE PELO MENOS UM EMPATE EM DATAS DE ANIVERSÁRIO:
+### Ref.: Exemplo 4.27 de "Introduction to Probability and Statistics Using R" (4ª edição)
+```{r }
+g <- Vectorize(pbirthday.ipsur)
+plot(1:50, g(1:50), xlab = 'Número de pessoas na sala',
+     ylab = 'P("pelo menos um empate de datas de aniversário")',
+     pch=21, bg="steelblue", col="blue",cex.lab=1.25, cex.axis=1.25)
+abline(h = 0.5)
+abline(v = 23, lty = 2)
+remove(g)
+```
+
+\
+
+## INSTALAÇÃO DO PACOTE RcmdrPlugin.IPSUR:
+```{r}
+devtools::install_github("gjkerns/RcmdrPlugin.IPSUR")
+```
+
+\
+
+## MANUAL DO PACOTE RcmdrPlugin.IPSUR:
+### https://mran.microsoft.com/snapshot/2015-01-06/web/packages/RcmdrPlugin.IPSUR/RcmdrPlugin.IPSUR.pdf
